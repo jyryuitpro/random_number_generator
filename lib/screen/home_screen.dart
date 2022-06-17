@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:random_number_generator/component/number_row.dart';
 import 'package:random_number_generator/constant/color.dart';
 import 'package:random_number_generator/screen/settings_screen.dart';
 
@@ -32,7 +33,9 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _Header(onPressed: onSettingsPop,),
+              _Header(
+                onPressed: onSettingsPop,
+              ),
               // Expanded(
               //   child: SizedBox(
               //     width: double.infinity,
@@ -75,13 +78,15 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void onSettingsPop () async {
+  void onSettingsPop() async {
     // list - add
     // [HomeScreen(), SettingsScreen()]
     final int? result = await Navigator.of(context).push<int>(
       MaterialPageRoute(
         builder: (BuildContext context) {
-          return SettingsScreen();
+          return SettingsScreen(
+            maxNumber: maxNumber,
+          );
         },
       ),
     );
@@ -115,7 +120,10 @@ class _HomeScreenState extends State<HomeScreen> {
 class _Header extends StatelessWidget {
   final VoidCallback onPressed;
 
-  const _Header({required this.onPressed, Key? key,}) : super(key: key);
+  const _Header({
+    required this.onPressed,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -159,25 +167,13 @@ class _Body extends StatelessWidget {
             .asMap()
             .entries
             .map(
-              (x) =>
-              Padding(
+              (x) => Padding(
                 padding: EdgeInsets.only(bottom: x.key == 2 ? 0 : 16.0),
-                child: Row(
-                  children: x.value
-                      .toString()
-                      .split('')
-                      .map(
-                        (y) =>
-                        Image.asset(
-                          'asset/img/$y.png',
-                          height: 70.0,
-                          width: 50.0,
-                        ),
-                  )
-                      .toList(),
+                child: NumberRow(
+                  number: x.value,
                 ),
               ),
-        )
+            )
             .toList(),
       ),
     );
